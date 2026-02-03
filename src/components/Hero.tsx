@@ -1,10 +1,10 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+// import { useEffect, useState } from "react";
 
 
 
 export default function Hero() {
-  const [index, setIndex] = useState(0);
+  // const [index, setIndex] = useState(0);
 
 
   return (

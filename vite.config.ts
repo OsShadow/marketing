@@ -5,4 +5,5 @@ import tailwindcss from '@tailwindcss/vite'; // Import the plugin
 
 export default defineConfig({
   plugins: [react(), tailwindcss()], // Add the plugin
+  base: "/marketing/", // 👈 nombre EXACTO del repo
 });

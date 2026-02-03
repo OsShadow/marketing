@@ -1,4 +1,4 @@
-import { motion, useScroll, AnimatePresence } from "framer-motion";
+import { motion,  AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const logos = [
@@ -30,7 +30,7 @@ const glitchVariants = {
 };
 
 export default function Navbar() {
-    const { scrollY } = useScroll();
+    // const { scrollY } = useScroll();
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
