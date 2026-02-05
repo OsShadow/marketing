@@ -18,7 +18,7 @@ export default function Gallery() {
 
     return (
         <section id="gallery" className="bg-black text-white px-6 py-24">
-            <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-7xl mt-5">
                 <motion.h2
                     style={{ y }}
                     initial={{ opacity: 0, y: 20 }}

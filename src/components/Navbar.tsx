@@ -1,99 +1,86 @@
-import { motion,  AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
-const logos = [
-    "/images/1.jfif",
-    "/images/2.jfif",
-    "/images/3.jfif",
-    "/images/4.jfif",
-    "/images/5.jfif",
-    "/images/6.jfif",
+const navItems = [
+    { label: "Inicio", to: "/" },
+    { label: "Galería", to: "/gallery" },
+    { label: "Contacto", to: "/contact" },
 ];
 
-const glitchVariants = {
-    initial: {
-        opacity: 0,
-        x: 0,
-        filter: "blur(2px)",
-    },
-    animate: {
-        opacity: 1,
-        x: 0,
-        filter: "blur(0px)",
-    },
-    exit: {
-        opacity: .5,
-        x: [-40, 40, -30, 30, 0],
-        filter: "blur(5px)",
-        transition: { duration: 0.20 },
-    },
-};
-
 export default function Navbar() {
-    // const { scrollY } = useScroll();
-    const [index, setIndex] = useState(0);
+    const [isOpen, setIsOpen] = useState(false);
 
+
+    // Cerrar con ESC
     useEffect(() => {
-        const interval = setInterval(() => {
-            setIndex((prev) => (prev + 1) % logos.length);
-        }, 1500);
-
-        return () => clearInterval(interval);
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setIsOpen(false);
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
     }, []);
 
 
+    // Bloquear scroll cuando el menú está abierto
+    useEffect(() => {
+        document.body.style.overflow = isOpen ? "hidden" : "auto";
+    }, [isOpen]);
+
     return (
-        <motion.nav
-            initial={{ y: -80, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="fixed top-6 left-1/2 z-50 w-[90%] max-w-4xl -translate-x-1/2  rounded-2xl bg-black/70 backdrop-blur-md border border-black/10"
-        >
-            <div className="flex items-center justify-between px-6 py-4">
-                <span className="text-sm font-light tracking-wide ">
-
-                    <AnimatePresence mode="wait">
-                        <motion.img
-                            key={index}
-                            src={logos[index]}
-                            alt="Logo"
-                            className="w-15"
-                            variants={glitchVariants}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                            transition={{ duration: 0.25, ease: "easeOut" }}
-                        />
-                    </AnimatePresence>
-
-
+        <>
+            {/* Botón menú */}
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="fixed top-6 left-6 z-50  text-2xl md:text-3xl"
+                aria-label="Toggle menu"
+            >
+                {/* Contorno blanco desplazado */}
+                <span className="absolute inset-0 translate-x-1 translate-y-1 text-white pointer-events-none">
+                    {isOpen ? "✕" : "☰"}
                 </span>
 
+                {/* Símbolo principal */}
+                <span className="relative text-black">
+                    {isOpen ? "✕" : "☰"}
+                </span>
+            </button>
 
-                <ul className="flex gap-6 text-xs uppercase tracking-widest text-white-600">
-                    <li className="cursor-point er hover:text-black transition">
-                        <a href="#home" className="relative after:absolute after:left-0 after:-bottom-1
-             after:h-px after:w-0 after:bg-black
-             hover:after:w-full after:transition-all">
-                            Home
-                        </a>
-                    </li>
-                    <li className="cursor-pointer hover:text-black transition">
-                        <a href="#gallery" className="relative after:absolute after:left-0 after:-bottom-1
-             after:h-px after:w-0 after:bg-black
-             hover:after:w-full after:transition-all">
-                            Galeria
-                        </a>
-                    </li>
-                    <li className="cursor-pointer hover:text-black transition">
-                        <a href="#contact" className="relative after:absolute after:left-0 after:-bottom-1
-             after:h-px after:w-0 after:bg-black
-             hover:after:w-full after:transition-all">
-                            Contacto
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </motion.nav>
+            {/* Menú fullscreen */}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.nav
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.35, ease: "easeInOut" }}
+                        className="fixed inset-0 z-40 bg-white text-black flex items-center justify-center"
+                    >
+                        <ul className="space-y-8 text-center">
+                            {navItems.map((item, index) => (
+                                <motion.li
+                                    key={item.to}
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{
+                                        delay: index * 0.1,
+                                        duration: 0.4,
+                                        ease: "easeOut",
+                                    }}
+                                >
+                                    <Link
+                                        to={item.to}
+                                        onClick={() => setIsOpen(false)}
+                                        className="text-4xl md:text-6xl font-light tracking-tight hover:opacity-60 transition-opacity"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </motion.li>
+                            ))}
+                        </ul>
+                    </motion.nav>
+                )}
+            </AnimatePresence>
+        </>
     );
 }

@@ -1,19 +1,14 @@
-// import { motion, AnimatePresence } from "framer-motion";
-// import { useEffect, useState } from "react";
-
 
 
 export default function Hero() {
-  // const [index, setIndex] = useState(0);
-
 
   return (
     <section id="home" className=" relative h-screen flex flex-col items-center justify-center bg-black">
       <video
-        src="/video/intro.mp4"
+        src= {`${import.meta.env.BASE_URL}video/intro.mp4`}
         autoPlay
         loop
-        // muted
+        muted
         playsInline
         className="
           w-full h-full
@@ -21,6 +16,7 @@ export default function Hero() {
           md:object-cover
         "
       />
+
 
       {/* Overlay opcional para legibilidad */}
       <div className="absolute inset-0 bg-black/20" />
